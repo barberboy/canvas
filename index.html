@@ -1,0 +1,70 @@
+<!doctype html>
+<html manifest="canvas.appcache">
+<head>
+    <title>Canvas</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        html,
+        body {
+            min-height: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        #game {
+            border: 1px solid #ddd;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="game" width="600" height="800">
+
+    </canvas>
+    <script>
+        var body = document.body;
+        var canvas = document.getElementById('game');
+        canvas.width = body.offsetWidth;
+        canvas.height = body.offsetHeight;
+        var ctx = canvas.getContext('2d');
+        
+
+        body.addEventListener('mousedown', mousedown);
+        body.addEventListener('mouseup', mouseup);
+        canvas.addEventListener('mousemove', mousemove)
+
+        var mouseIsDown = 0;
+
+        function mousedown() {
+            console.log("Mousedown");
+            ++mouseIsDown;
+        }
+
+        function mouseup() {
+            console.log("Mouseup");
+            --mouseIsDown;
+        }
+
+        function mousemove(e) {
+            if (mouseIsDown) {
+                var coords = coordinates(e);
+                console.log(coords);
+                ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+                ctx.fillRect(coords.x, coords.y, 10, 10);
+            }
+        }
+
+        function coordinates(e) {
+            return {
+                x: e.clientX - canvas.offsetLeft,
+                y: e.clientY - canvas.offsetTop
+            }
+
+        }
+    </script>
+    <script src="touches.js"></script>
+</body>
+
+</html>
