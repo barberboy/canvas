@@ -1,5 +1,6 @@
 <!doctype html>
 <html manifest="canvas.appcache">
+
 <head>
     <title>Canvas</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,6 +13,7 @@
             padding: 0;
             margin: 0;
         }
+        
         #game {
             display: block;
         }
@@ -25,20 +27,25 @@
     <script>
         var body = document.body;
         var canvas = document.getElementById('game');
+
+        // Force canvas full screen
         canvas.width = body.offsetWidth;
         canvas.height = body.offsetHeight;
-        var ctx = canvas.getContext('2d');
-        
 
+        // Register event listeners.
         body.addEventListener('mousedown', mousedown);
         body.addEventListener('mouseup', mouseup);
         canvas.addEventListener('mousemove', mousemove)
 
+        var lineWidth = 75;
         var mouseIsDown = 0;
 
-        function mousedown() {
+        var ctx = canvas.getContext('2d');
+
+        function mousedown(e) {
             console.log("Mousedown");
             ++mouseIsDown;
+            drawCircle(coordinates(e));
         }
 
         function mouseup() {
@@ -50,9 +57,19 @@
             if (mouseIsDown) {
                 var coords = coordinates(e);
                 console.log(coords);
-                ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
-                ctx.fillRect(coords.x, coords.y, 10, 10);
+                drawCircle(coordinates(e));
             }
+        }
+
+        function drawCircle(coords) {
+            /*
+            ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+            ctx.fillRect(coords.x, coords.y, 10, 10);
+            */
+            ctx.beginPath();
+            ctx.arc(coords.x, coords.y, lineWidth / 2, 0, 2 * Math.PI, false);
+            ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+            ctx.fill();
         }
 
         function coordinates(e) {
@@ -60,7 +77,6 @@
                 x: e.clientX - canvas.offsetLeft,
                 y: e.clientY - canvas.offsetTop
             }
-
         }
     </script>
     <script src="touches.js"></script>

@@ -11,9 +11,9 @@ function restoreState() {
     var el = document.getElementsByTagName("canvas")[0];
     var img = document.createElement('img');
     var ctx = el.getContext("2d");
- //   img.src =localStorage.canvasData; 
-//    ctx.drawImage(img,0,0);
-//    console.log("restoring " + localStorage.canvasData);
+    //   img.src =localStorage.canvasData; 
+    //    ctx.drawImage(img,0,0);
+    //    console.log("restoring " + localStorage.canvasData);
   }
 }
 
@@ -23,7 +23,7 @@ function startup() {
   el.addEventListener("touchend", handleEnd, false);
   el.addEventListener("touchcancel", handleCancel, false);
   el.addEventListener("touchmove", handleMove, false);
-  
+
   restoreState();
   log("initialized.");
 }
@@ -43,7 +43,7 @@ function handleStart(evt) {
 
     var color = colorForTouch(touches[i]);
     ctx.beginPath();
-    ctx.arc(touches[i].pageX, touches[i].pageY, lineWidth / 2, 0, 2 * Math.PI, false); // a circle at the start
+    ctx.arc(touches[i].pageX - (lineWidth / 4), touches[i].pageY - (lineWidth / 4), lineWidth / 2, 0, 2 * Math.PI, false); // a circle at the start
     ctx.fillStyle = color;
     ctx.fill();
     log(touches[i].pageX + " " + touches[i].pageY)
@@ -64,15 +64,10 @@ function handleMove(evt) {
     if (idx >= 0) {
       log("continuing touch " + idx);
       ctx.beginPath();
-      log("ctx.moveTo(" + ongoingTouches[idx].pageX + ", " + ongoingTouches[idx].pageY + ");");
-      //      ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
-      log("ctx.lineTo(" + touches[i].pageX + ", " + touches[i].pageY + ");");
-      ctx.arc(ongoingTouches[i].pageX, ongoingTouches[i].pageY, lineWidth / 2, 0, 2 * Math.PI, false); // a circle at the start
-      //      ctx.lineTo(touches[i].pageX, touches[i].pageY);
+      ctx.arc(ongoingTouches[i].pageX - (lineWidth / 4), ongoingTouches[i].pageY - (lineWidth / 4), lineWidth / 2, 0, 2 * Math.PI, false);
       ctx.lineWidth = lineWidth;
       ctx.strokeStyle = color;
       ctx.fill();
-
       ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
       log(".");
     }
@@ -119,11 +114,14 @@ function handleCancel(evt) {
   }
 }
 
+function randBetween(x) {
+  return Math.floor(Math.random() * x);
+}
 
 function colorForTouch(touch) {
   var r = touch.identifier % 16;
   var g = Math.floor(touch.identifier / 3) % 16;
-  var b = Math.floor(touch.identifier / 7) % 16;
+  var b = Math.floor(touch.identifier / 6) % 16;
   r = r.toString(16); // make it a hex digit
   g = g.toString(16); // make it a hex digit
   b = b.toString(16); // make it a hex digit
