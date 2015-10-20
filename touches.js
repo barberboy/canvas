@@ -35,7 +35,7 @@ function mousedown(evt) {
   evt.preventDefault();
   ++mouseIsDown;
   ++clickIdentifier;
-  
+
   var coords = coordinates(evt);
   drawCircle(coords.x, coords.y, colorForId(clickIdentifier));
 }
@@ -67,14 +67,17 @@ function drawCircle(x, y, color) {
   ctx.fill();
 }
 
+function randBetween(l, h) {
+  return Math.floor(Math.random() * (h - l)) + l;
+}
+
+var saturation = randBetween(30, 100);
+var lightness = randBetween(30, 90);
+
 function colorForId(identifier) {
-  var r = identifier % 16;
-  var g = Math.floor(identifier / 3) % 16;
-  var b = Math.floor(identifier / 6) % 16;
-  r = r.toString(16); // make it a hex digit
-  g = g.toString(16); // make it a hex digit
-  b = b.toString(16); // make it a hex digit
-  var color = "#" + r + g + b;
+  var hue = (identifier % 18) * 20;
+  var color = "hsl(" + hue + "," + saturation + "%," + lightness + "%)";
+  //console.log(color);
   return color;
 }
 
@@ -87,3 +90,14 @@ function coordinates(evt) {
 }
 
 init();
+
+function rgbColor(identifier) {
+  var r = identifier % 16;
+  var g = Math.floor(identifier / 3) % 16;
+  var b = Math.floor(identifier / 6) % 16;
+  r = r.toString(16); // make it a hex digit
+  g = g.toString(16); // make it a hex digit
+  b = b.toString(16); // make it a hex digit
+  var color = "#" + r + g + b;
+  return color;
+}
